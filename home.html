@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ProGS2Z™</title>
+  <link rel="icon" type="image/png" href="https://i.im.ge/2025/03/26/pinVHr.PFP.png">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+          cursor: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 fill=%22none%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2214%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3Cpath d=%22M16 8v16M8 16h16%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3C/svg%3E') 16 16, auto;
+
+
+    }
+    #vanta-bg {
+      width: 250%;
+      height: 200%;
+      position: absolute;
+      z-index: -1;
+    }
+    .quote {
+      font-size: 18px;
+      color: White;
+      background-color: #003200;
+      z-index: 1;
+      text-align: center;
+      opacity: 0;
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 2px #003200;
+      transition: opacity 2s ease-in;
+      user-select: none;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    #center-image {
+      position: relative;
+      z-index: 1;
+      max-width: 50%;
+      height: auto;
+      pointer-events: none;
+    }
+    #catchphrase {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 15px;
+      color: #fff;
+      margin-top: 10px;
+      text-transform: uppercase;
+    }
+    #launch-button {
+      margin-top: 20px;
+      border-radius: 25px;
+      padding: 12px 24px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      background-color: #003200;
+      border: none;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    #launch-button:hover {
+      background-color: #3cfa2f;
+      transform: scale(1.1);
+    }
+    .battery-container {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 120px;
+      height: 60px;
+      border: 3px solid #0f0;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      background-color: #111;
+      flex-direction: column;
+      text-align: center;
+      transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+    .battery-container:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px #0f0;
+    }
+    .battery-text {
+      font-size: 14px;
+      font-family: 'Orbitron', sans-serif;
+      color: #0f0;
+      font-weight: bold;
+      margin-bottom: 5px;
+      z-index: 2;
+    }
+    .battery-wrapper {
+      position: relative;
+      width: 100%;
+      height: 20px;
+      border: 2px solid #0f0;
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: #111;
+    }
+    .battery-level {
+      height: 100%;
+      width: 100%;
+      background-color: green;
+      transition: width 0.3s ease-in-out;
+    }
+    .battery-tip {
+      width: 7px;
+      height: 20px;
+      background-color: #0f0;
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="vanta-bg"></div>
+  <img id="center-image" src="https://i.im.ge/2025/03/21/pL905D.Home-Text.png" alt="ProGS2Z">
+  <div id="catchphrase">Key "\" For Panic</div>
+  <div class="quote" id="quote"></div>
+  <button id="launch-button" onclick="launchWebsite()">Launch Website</button>
+
+  <!-- Battery Widget -->
+  <div class="battery-container">
+    <div class="battery-text" id="batteryText">Battery: 100%</div>
+    <div class="battery-wrapper">
+      <div class="battery-level" id="batteryLevel"></div>
+    </div>
+    <div class="battery-tip"></div>
+  </div>
+
+  <script>
+    VANTA.NET({
+      el: "#vanta-bg",
+      mouseControls: false,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.00,
+      scaleMobile: 1.00,
+      color: 0x138400,
+      backgroundColor: 0
+    });
+
+    const quotes = [
+      "Explore over 100+ games! I forgot to count so I think it is...",
+      "Dive into a world of games!",
+      "Click around and discover something new!",
+      "Listen to your conscience.",
+      "Your adventure starts after school!",
+      "Please stop playing Roblox.",
+      "Honestly you've got like 6 hours, you're fine.",
+      "Get ready to play I guess.",
+      "When is the next period?",
+      "Get expelled, I dare you.",
+      "IT'S FREEEEEE!!!!!!",
+      "Put At 75% Zoom! Pls.",
+      "Granny 3 !?.",
+      "Give up.",
+      "Boo!... Easter Egg. (1 in 1000 chance)",
+      "The best game site ever. - No one"
+    ];
+
+    function getRandomQuote() {
+      return quotes[Math.floor(Math.random() * quotes.length)];
+    }
+
+    setTimeout(() => {
+      document.getElementById('quote').textContent = getRandomQuote();
+      document.getElementById('quote').style.opacity = 1;
+    }, 3000);
+
+    function launchWebsite() {
+      const url = "https://prohomework2z.neocities.org/";
+      window.open(url, "popup", "width=800,height=600");
+    }
+
+    function updateBattery() {
+      navigator.getBattery().then(function(battery) {
+        let level = battery.level * 100;
+        let batteryLevel = document.getElementById('batteryLevel');
+        let batteryText = document.getElementById('batteryText');
+        batteryLevel.style.width = level + '%';
+        batteryText.textContent = 'Battery: ' + Math.round(level) + '% ' + (battery.charging ? '⚡' : '');
+        batteryLevel.style.backgroundColor = level > 50 ? 'green' : level > 20 ? 'orange' : 'red';
+      });
+    }
+    updateBattery();
+    setInterval(updateBattery, 5000);
+  </script>
+</body>
+</html>
