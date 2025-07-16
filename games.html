@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Game Grid</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000;
+            margin: 0;
+            font-family: 'Share Tech Mono', monospace;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            padding: 20px;
+            cursor: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 fill=%22none%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2214%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3Cpath d=%22M16 8v16M8 16h16%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3C/svg%3E') 16 16, auto;
+
+        }
+        #searchBar {
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            border: 2px solid #00ff00;
+            background: #002200;
+            color: #fff;
+            text-align: center;
+            box-shadow: 0px 0px 10px rgba(0, 255, 0, 0.8);
+        }
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+        }
+        .game-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            background-color: #002200;
+            border: 2px solid #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 0px 15px rgba(0, 255, 0, 0.8);
+            height: 100px;
+        }
+        .game-item:hover {
+            background-color: #004400;
+            transform: scale(1.05);
+            border-color: #00ff00;
+        }
+        .game-title {
+            color: #0f0;
+            text-align: center;
+            font-size: 1.2rem;
+            padding: 5px 10px;
+        }
+        #iframeContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        #gameIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+        #closeButton, #fullscreenButton {
+            position: fixed;
+            bottom: 20px;  /* Change from top to bottom */
+            right: 20px;   /* Keeps it at the bottom-right */
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0px 0px 10px rgba(0, 255, 0, 0.8);
+        }
+        #fullscreenButton {
+            right: 70px;  /* Adjust for positioning of fullscreen button next to close button */
+        }
+        #closeButton:hover, #fullscreenButton:hover {
+            background-color: #00cc00;
+            box-shadow: 0px 0px 20px rgba(0, 255, 0, 1);
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="searchBar" placeholder="Search games...">
+    <div class="game-grid" id="gameGrid"></div>
+
+    <div id="iframeContainer">
+        <button id="closeButton" aria-label="Close Game">X</button>
+        <button id="fullscreenButton" aria-label="Fullscreen">⛶</button>
+        <iframe id="gameIframe" src="" frameborder="0"></iframe>
+    </div>
+
+    <script>
+        const games = [
+  { title: "1v1.LOL", link: "https://html.cafe/x24d7f2d2" },
+  { title: "2048", link: "https://html.cafe/xced97be4" },
+  { title: "60s Second Burger Run", link: "https://html.cafe/xb1ce207a" },
+  { title: "60s Second Santa Run", link: "https://html.cafe/x9b325bec" },
+  { title: "8 Ball Pool", link: "https://html.cafe/xd9798ea8" },
+  { title: "A Small World Cup", link: "https://html.cafe/x07c3f482" },
+  { title: "Achievement Unlocked 2", link: "https://html.cafe/x8776327b" },
+  { title: "Achievement Unlocked 3", link: "https://html.cafe/xe49070bf" },
+  { title: "Achievement Unlocked", link: "https://html.cafe/x7022f2fa" },
+  { title: "Agar.io", link: "https://html.cafe/x544e3feb" },
+  { title: "Ahoy Survival", link: "https://html.cafe/xf7afed8d" },
+  { title: "Amazing Strange Rope Police", link: "https://html.cafe/x56ef0937" },
+  { title: "Among Us", link: "https://html.cafe/xacf77250" },
+  { title: "Angry Bird", link: "https://html.cafe/xc2031120" },
+  { title: "Aquapark.io", link: "https://html.cafe/xf96848b6" },
+  { title: "BTD", link: "https://html.cafe/xf535c881" },
+  { title: "Backrooms", link: "https://html.cafe/xb1ce207a" },
+  { title: "Bad Icecream", link: "https://html.cafe/x829e1d28" },
+  { title: "Baldis Basic", link: "https://html.cafe/xbb24d780" },
+  { title: "Bank Robbery", link: "https://html.cafe/x23a7280a" },
+  { title: "Basket Random", link: "https://html.cafe/x94a9c242" },
+  { title: "Basketball Stars", link: "https://html.cafe/xaea1d2bc" },
+  { title: "Bit Plane", link: "https://html.cafe/x471b3bbb" },
+  { title: "BitLife", link: "https://html.cafe/x6fa3e8c5" },
+  { title: "Block Blast", link: "https://html.cafe/x19d7a18c" },
+  { title: "Bloxorz", link: "https://html.cafe/x1a7c8ea1" },
+  { title: "Bob the Robber", link: "https://html.cafe/x2eb5ac7d" },
+  { title: "Bottle Flip 3D", link: "https://html.cafe/xdc3d9dfd" },
+  { title: "Boxing Random", link: "https://html.cafe/x22a42a5e" },
+  { title: "Burrito Bison", link: "https://html.cafe/x7be0ab7a" },
+  { title: "CS:GO Clicker", link: "https://html.cafe/xa376eff2" },
+  { title: "Call of Duty - Black Ops", link: "https://html.cafe/xb16c99e2" },
+  { title: "Capybara Clicker", link: "https://html.cafe/xddfc6a8e" },
+  { title: "Car Crash Test", link: "https://html.cafe/xd0fef31b" },
+  { title: "Car Drawing", link: "https://html.cafe/x8a3a958b" },
+  { title: "Car Survival", link: "https://html.cafe/x4ff9d2f7" },
+  { title: "Checkers", link: "https://html.cafe/xc37d4577" },
+  { title: "Chess", link: "https://html.cafe/x660cee92" },
+  { title: "Chicken War", link: "https://html.cafe/x5a12ab96" },
+  { title: "CleanUp.io", link: "https://html.cafe/x474dac37" },
+  { title: "Cluster Rush", link: "https://html.cafe/x2915e6b0" },
+  { title: "Cookie Clicker", link: "https://html.cafe/xe5f79f8e" },
+  { title: "Crossy Road", link: "https://html.cafe/x0987cd16" },
+  { title: "Doge Miner", link: "https://html.cafe/xef20df01" },
+  { title: "Doodle Jump", link: "https://html.cafe/x5cfb5291" },
+  { title: "Drift In Russia", link: "https://html.cafe/xb08f9528" },
+  { title: "Drive Mad", link: "https://html.cafe/x53155bd7" },
+  { title: "Escape Road", link: "https://html.cafe/xf5824292" },
+  { title: "FNAF", link: "https://html.cafe/x35eb4e78" },
+  { title: "Ginspin", link: "https://html.cafe/x0b3350eb" },
+  { title: "Google Dino", link: "https://html.cafe/xe2f35239" },
+  { title: "Granny", link: "https://html.cafe/xd60a74a8" },
+  { title: "Hole.io", link: "https://html.cafe/x5dd814b8" },
+  { title: "Infinite Craft", link: "https://html.cafe/xac49551a" },
+  { title: "Jetpack Joyride", link: "https://html.cafe/xe595b18d" },
+  { title: "Justfall.lol", link: "https://html.cafe/xd00e9e0f" },
+  { title: "Learn to Fly", link: "https://html.cafe/x6d50c4e8" },
+  { title: "MSCM", link: "https://html.cafe/x6225bb97" },
+  { title: "Molen Playground", link: "https://html.cafe/x8d0315a8" },
+  { title: "MotoX3M", link: "https://html.cafe/x90f6f8a8" },
+  { title: "OvO", link: "https://html.cafe/x4ce02684" },
+  { title: "Papa’s Pizzeria", link: "https://html.cafe/x886ce87b" },
+  { title: "Paper.io 2", link: "https://html.cafe/xd243fd55" },
+  { title: "Ragdoll Archers", link: "https://html.cafe/xdf252d7c" },
+  { title: "Retro Bowl", link: "https://html.cafe/x1693cbf5" },
+  { title: "Rocket League", link: "https://html.cafe/xa0e4da39" },
+  { title: "Run 2", link: "https://html.cafe/x41021f9c" },
+  { title: "Slither.io", link: "https://html.cafe/xb50973be" },
+  { title: "Slope", link: "https://html.cafe/xea9fd68b" },
+  { title: "Snow Rider 3D", link: "https://html.cafe/x321ed45f" },
+  { title: "Soccer Random", link: "https://html.cafe/x72322a1e" },
+  { title: "Sprunki", link: "https://html.cafe/xf9257001" },
+  { title: "Stickman Hook", link: "https://html.cafe/xba2e1268" },
+  { title: "Subway Surfers", link: "https://html.cafe/xa13664d4" },
+  { title: "Super Hot", link: "https://html.cafe/x1f6e0335" },
+  { title: "Super Mario Bros.", link: "https://html.cafe/x967d4495" },
+  { title: "The Impossible Quiz", link: "https://html.cafe/x687c84dd" },
+  { title: "There Is No Game", link: "https://html.cafe/x0b61b5c1" },
+  { title: "Tiny Fishing", link: "https://html.cafe/xc4a97eb7" },
+  { title: "Wordle", link: "https://html.cafe/x58bb19db" }
+        ];
+
+        function displayGames(filteredGames = games) {
+            const gameGrid = document.getElementById("gameGrid");
+            gameGrid.innerHTML = "";
+            filteredGames.forEach(game => {
+                let gameItem = document.createElement("a");
+                gameItem.href = "#";
+                gameItem.classList.add("game-item");
+                gameItem.setAttribute("data-title", game.title);
+                gameItem.setAttribute("data-link", game.link);
+                gameItem.innerHTML = `<div class="game-title">${game.title}</div>`;
+                gameItem.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    openIframe(game.link);
+                });
+                gameGrid.appendChild(gameItem);
+            });
+        }
+
+        function openIframe(link) {
+            const iframeContainer = document.getElementById("iframeContainer");
+            const gameIframe = document.getElementById("gameIframe");
+            iframeContainer.style.display = "flex";
+            gameIframe.src = link;
+        }
+
+        function searchGames() {
+            const query = document.getElementById("searchBar").value.toLowerCase();
+            const filteredGames = games.filter(game => game.title.toLowerCase().includes(query));
+            displayGames(filteredGames);
+        }
+
+        document.getElementById("searchBar").addEventListener("input", searchGames);
+
+        document.getElementById('closeButton').addEventListener('click', function () {
+            document.getElementById("iframeContainer").style.display = "none";
+            document.getElementById("gameIframe").src = "";
+        });
+
+        document.getElementById('fullscreenButton').addEventListener('click', function () {
+            let iframeContainer = document.getElementById("iframeContainer");
+            if (iframeContainer.requestFullscreen) {
+                iframeContainer.requestFullscreen();
+            } else if (iframeContainer.mozRequestFullScreen) {
+                iframeContainer.mozRequestFullScreen();
+            } else if (iframeContainer.webkitRequestFullscreen) {
+                iframeContainer.webkitRequestFullscreen();
+            } else if (iframeContainer.msRequestFullscreen) {
+                iframeContainer.msRequestFullscreen();
+            }
+            this.style.display = 'none';
+            document.getElementById('closeButton').style.display = 'none';
+        });
+
+        document.addEventListener("fullscreenchange", function () {
+            if (!document.fullscreenElement) {
+                document.getElementById('fullscreenButton').style.display = 'flex';
+                document.getElementById('closeButton').style.display = 'flex';
+            }
+        });
+
+        // Display all games on initial load
+        displayGames();
+    </script>
+</body>
+</html>
