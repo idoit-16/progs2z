@@ -3,170 +3,327 @@
 
 <head>
 	<meta charset="UTF-8" />
-	<title>𝙋𝙧𝙤𝙂𝙎2𝙕</title>
+	<title>𝙋𝙧𝙤𝙂𝙎2𝙕™</title>
 	<link rel="icon" type="image/png" href="https://i.im.ge/2025/03/26/pinVHr.PFP.png" />
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 	<style>
-		* {
+		body,
+		html {
 			margin: 0;
 			padding: 0;
-			box-sizing: border-box;
-		}
-
-		html,
-		body {
-			width: 100%;
 			height: 100%;
-			font-family: 'Courier New', Courier, monospace;
-			background-color: #0d0d0d;
-			color: #33ff33;
-		}
-
-		body {
-			display: flex;
-			height: 100vh;
+			background: #121212;
+			color: white;
+			font-family: 'Courier New', monospace;
+			cursor: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 fill=%22none%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2214%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3Cpath d=%22M16 8v16M8 16h16%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3C/svg%3E') 16 16, auto;
 			overflow: hidden;
 		}
 
-		.sidebar {
+		/* === Apple Glass Navbar === */
+		.navbar {
+			width: 70px;
+			height: 100vh;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			align-items: center;
+			padding: 10px 0;
 			position: fixed;
-			/* Make sidebar fixed */
 			top: 0;
 			left: 0;
-			height: 100vh;
-			/* Full viewport height */
-			width: 260px;
-			background-color: #000;
-			padding: 20px 15px;
-			display: flex;
-			flex-direction: column;
-			gap: 12px;
-			box-shadow: 0 0 15px #00ff88;
-			z-index: 9999;
-			/* Keep sidebar on top */
+			z-index: 100;
+
+			/* ✨ Apple-style translucent glass effect */
+			background: rgba(0, 0, 0, 0.35);
+			backdrop-filter: blur(20px) saturate(180%);
+			-webkit-backdrop-filter: blur(20px) saturate(180%);
+
+			/* Futuristic green glow border */
+			border-right: 2px solid rgba(0, 255, 0, 0.4);
+			box-shadow: 2px 0 25px rgba(0, 255, 0, 0.25);
+
+			/* Smooth slide-in animation */
+			transform: translateX(-100%);
+			animation: slideIn 0.6s ease-out forwards;
 		}
 
-		.branding {
+		@keyframes slideIn {
+			to {
+				transform: translateX(0);
+			}
+		}
+
+		/* Animated light streak shimmer */
+		.navbar::before {
+			content: "";
+			position: absolute;
+			top: -100%;
+			left: 0;
+			width: 100%;
+			height: 200%;
+			background: linear-gradient(rgba(0, 255, 0, 0.15),
+					rgba(0, 255, 0, 0) 60%,
+					rgba(0, 255, 0, 0.1));
+			animation: shimmer 6s infinite linear;
+			pointer-events: none;
+		}
+
+		@keyframes shimmer {
+			0% {
+				transform: translateY(-50%);
+			}
+
+			100% {
+				transform: translateY(50%);
+			}
+		}
+
+		.navbar .left-content {
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			margin-bottom: 20px;
-		}
-
-		.branding img {
-			width: 60px;
-			height: 60px;
-			border-radius: 50%;
-			margin-bottom: 10px;
-		}
-
-		.branding h1 {
-			font-size: 20px;
-			color: #004000;
-			margin: 0;
-			text-shadow: 0 0 5px #004000;
-		}
-
-		.branding p {
-			font-size: 14px;
-			color: #33ff33;
-			margin-top: 2px;
-		}
-
-		.nav-link {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-			padding: 12px 18px;
-			border-radius: 12px;
-			background-color: #111;
-			color: #003200;
-			text-decoration: none;
-			font-size: 16px;
-			transition: all 0.2s ease-in-out;
-			cursor: pointer;
-			border: 1px solid transparent;
-		}
-
-		.nav-link:hover {
-			background-color: #191919;
-			border: 2px solid #003200;
-		}
-
-		.nav-link.active {
-			background-color: #000;
-			border: 1px solid #33ff33;
-			color: #33ff33;
-		}
-
-		.nav-link i {
-			width: 20px;
+			gap: 8px;
+			color: #00ff00;
+			font-weight: bold;
+			font-size: 13px;
+			padding-top: 10px;
+			user-select: none;
 			text-align: center;
-			font-size: 16px;
 		}
 
-		.content {
-			margin-left: 260px;
-			/* Push content to the right of sidebar */
-			height: 100vh;
-			flex: 1;
-			padding: 0;
-			overflow: hidden;
+		.navbar .left-content img {
+			width: 34px;
+			height: 34px;
+			border-radius: 8px;
+		}
+
+		.navbar .nav-buttons {
+			display: flex;
+			flex-direction: column;
+			gap: 15px;
+			flex-grow: 1;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.navbar .icon-btn {
+			background: none;
+			border: none;
+			margin: 0;
+			cursor: pointer;
+			transition: transform 0.2s ease, filter 0.2s ease;
+			filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(7473%) hue-rotate(88deg) brightness(104%) contrast(107%);
+		}
+
+		.navbar .icon-btn img {
+			width: 28px;
+			height: 28px;
+			filter: brightness(0) saturate(100%) invert(67%) sepia(99%) saturate(662%) hue-rotate(67deg) brightness(102%) contrast(102%);
+			transition: transform 0.3s ease, filter 0.3s ease;
+		}
+
+		.navbar .icon-btn:hover img {
+			transform: scale(1.2) rotate(3deg);
+			filter: drop-shadow(0 0 6px #00ff00);
+		}
+
+		.settings-icon {
+			margin-bottom: 10px;
+			cursor: pointer;
+		}
+
+		.settings-icon img {
+			width: 28px;
+			height: 28px;
+			filter: brightness(0) saturate(100%) invert(67%) sepia(99%) saturate(662%) hue-rotate(67deg) brightness(102%) contrast(102%);
+			transition: all 0.3s ease;
+		}
+
+		.settings-icon:hover img {
+			transform: rotate(30deg) scale(1.1);
+			filter: drop-shadow(0 0 6px #00ff00);
 		}
 
 		iframe {
-			width: 100%;
+			position: absolute;
+			top: 0;
+			left: 70px;
+			width: calc(100% - 70px);
 			height: 100vh;
 			border: none;
+		}
+
+		.settings-panel {
+			position: fixed;
+			top: 0;
+			left: 70px;
+			width: calc(100% - 70px);
+			height: 100vh;
+			background: rgba(0, 0, 0, 0.85);
+			backdrop-filter: blur(12px);
+			padding: 40px;
+			display: none;
+			z-index: 200;
+			box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+			overflow-y: auto;
+			color: #00ff00;
+			animation: fadeIn 0.3s ease;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+
+			to {
+				opacity: 1;
+			}
+		}
+
+		.settings-btn {
 			display: block;
+			background: rgba(0, 0, 0, 0.5);
+			color: #00ff00;
+			padding: 15px;
+			border: 1px solid #00ff00;
+			border-radius: 10px;
+			margin: 10px 0;
+			font-size: 16px;
+			text-align: center;
+			text-transform: uppercase;
+			cursor: pointer;
+			transition: background 0.3s ease, transform 0.2s ease;
 		}
 
-		h1 {
-			text-shadow: 0 0 10px #00ff88;
+		.settings-btn:hover {
+			background-color: #00ff00;
+			color: #121212;
+			transform: scale(1.05);
 		}
 
-		p {
-			font-size: 18px;
+		input {
+			width: 100%;
+			padding: 10px;
+			margin-bottom: 10px;
+			border: 2px solid #00ff00;
+			color: #00ff00;
+			background-color: #121212;
+			border-radius: 5px;
+		}
+
+		.tab-cloak-container {
+			display: flex;
+			align-items: center;
+			gap: 20px;
+		}
+
+		.tab-cloak-container input {
+			width: 45%;
+		}
+
+		.separator {
+			border-top: 2px solid #00ff00;
+			margin: 20px 0;
 		}
 	</style>
 </head>
 
 <body>
-
-	<div class="sidebar">
-		<div class="branding">
-			<img src="https://i.im.ge/2025/03/26/pinVHr.PFP.png" alt="ProGS2Z Logo" />
-			<h1>ProGS2Z</h1>
-			<p>V1.0</p>
+	<!-- Navbar -->
+	<div class="navbar">
+		<div class="left-content">
+			<img src="https://i.im.ge/2025/03/26/pinVHr.PFP.png" alt="favicon" />
+			<span>ProGS2Z |V1.0.0</span>
 		</div>
-		<div class="divider"></div>
 
-		<div class="nav-link active" data-page="home.html"><i class="fas fa-home"></i> Home</div>
-		<div class="nav-link" data-page="games.html"><i class="fas fa-gamepad"></i> Games</div>
-		<div class="nav-link" data-page="app.html"><i class="fas fa-th-large"></i> Apps</div>
-		<div class="nav-link" data-page="partner.html"><i class="fas fa-link"></i> Partners</div>
-		<div class="nav-link" data-page="setting.html"><i class="fas fa-cog"></i> Settings</div>
-	</div>
+		<div class="nav-buttons">
+			<button onclick="switchPage('home')" class="icon-btn" title="Home">
+        <img src="https://img.icons8.com/ios-filled/50/00ff00/home.png" alt="Home" />
+      </button>
+			<button onclick="switchPage('games')" class="icon-btn" title="Games">
+        <img src="https://img.icons8.com/ios-filled/50/00ff00/controller.png" alt="Games" />
+      </button>
+			<button onclick="switchPage('apps')" class="icon-btn" title="Apps">
+        <img src="https://img.icons8.com/ios-filled/50/00ff00/smartphone-tablet.png" alt="Apps" />
+      </button>
+		</div>
 
-	<div class="content">
-		<iframe id="page-frame" src="home.html"></iframe>
-	</div>
+		<div class="settings-icon" onclick="toggleSettings()" title="Settings">
+			<img src="https://img.icons8.com/ios-filled/50/00ff00/settings.png" alt="Settings" />
+    </div>
+		</div>
 
-	<script>
-		const links = document.querySelectorAll('.nav-link');
-    const frame = document.getElementById('page-frame');
+		<!-- Settings Panel -->
+		<div class="settings-panel" id="settingsPanel">
+			<h3 style="color: #00ff00; text-align: center;">Settings</h3>
+			<div class="tab-cloak-container">
+				<input type="text" id="tab-name" placeholder="Enter Tab Title" />
+				<input type="url" id="favicon-url" placeholder="Enter Favicon URL" />
+    </div>
+				<button class="settings-btn" onclick="applyTabCloak()">Apply Tab Cloak</button>
+				<div class="separator"></div>
+				<button class="settings-btn" onclick="openAboutBlank()">Open about:blank</button>
+			</div>
 
-    links.forEach(link => {
-      link.addEventListener('click', () => {
-        links.forEach(l => l.classList.remove('active'));
-        link.classList.add('active');
+			<!-- Main Frame -->
+			<iframe id="contentFrame" src="https://html.cafe/xb0090e72"></iframe>
 
-        const page = link.getAttribute('data-page');
-        frame.src = page;
-      });
+			<!-- Scripts -->
+			<script>
+				function switchPage(page) {
+      const settingsPanel = document.getElementById('settingsPanel');
+      if (settingsPanel.style.display === 'block') {
+        settingsPanel.style.display = 'none';
+      }
+      const frame = document.getElementById('contentFrame');
+      if (page === 'home') {
+        frame.src = 'home.html';
+      } else if (page === 'games') {
+        frame.src = 'games.html';
+      } else if (page === 'apps') {
+        frame.src = 'app.hmtl';
+      }
+    }
+
+    function toggleSettings() {
+      const settingsPanel = document.getElementById('settingsPanel');
+      settingsPanel.style.display =
+        settingsPanel.style.display === 'none' || settingsPanel.style.display === ''
+          ? 'block'
+          : 'none';
+    }
+
+    function applyTabCloak() {
+      const tabName = document.getElementById('tab-name').value;
+      const faviconUrl = document.getElementById('favicon-url').value;
+      if (tabName && faviconUrl) {
+        document.title = tabName;
+        const link = document.querySelector('link[rel="icon"]');
+        if (link) link.href = faviconUrl;
+      } else {
+        alert('Please enter both a tab name and favicon URL.');
+      }
+    }
+
+    function openAboutBlank() {
+      const gameUrl = 'https://idoit-16.github.io/progs2z/';
+      const win = window.open('about:blank', '_blank');
+      win.document.write(`
+        <html>
+          <head><title>Math Work</title></head>
+          <body style="margin: 0; background: #000;">
+            <iframe src="${gameUrl}" width="100%" height="100%" style="border: none;"></iframe>
+          </body>
+        </html>
+      `);
+      win.document.close();
+    }
+
+    window.addEventListener('keydown', function(event) {
+      if (event.key === '\\') {
+        window.location.href = 'https://www.google.com';
+      }
     });
-	</script>
-
+			</script>
 </body>
 
 </html>
