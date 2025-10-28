@@ -1,96 +1,139 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Game Hub</title>
-<style>
-  body {
-    background-color: black;
-    color: lime;
-    font-family: monospace;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-  }
-  #searchBar {
-    margin: 20px;
-    padding: 10px;
-    width: 80%;
-    font-size: 1rem;
-  }
-  .game-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-  .game-item {
-    border: 1px solid lime;
-    padding: 10px;
-    cursor: pointer;
-    width: 150px;
-    height: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.3s;
-  }
-  .game-item:hover {
-    background: lime;
-    color: black;
-  }
-  #iframeContainer {
-    display: none;
-    position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: black;
-    z-index: 10;
-    flex-direction: column;
-  }
-  #gameIframe {
-    flex: 1;
-    border: none;
-  }
-  #closeButton {
-    background: lime;
-    color: black;
-    border: none;
-    padding: 10px;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-</style>
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hacker Game Grid</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000;
+            margin: 0;
+            font-family: 'Share Tech Mono', monospace;
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+            padding: 20px;
+            cursor: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 fill=%22none%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2214%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3Cpath d=%22M16 8v16M8 16h16%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3C/svg%3E') 16 16, auto;
+
+        }
+        #searchBar {
+            width: 80%;
+            max-width: 400px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            border: 2px solid #00ff00;
+            background: #002200;
+            color: #fff;
+            text-align: center;
+            box-shadow: 0px 0px 10px rgba(0, 255, 0, 0.8);
+        }
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            width: 90%;
+            max-width: 1200px;
+            padding: 20px;
+        }
+        .game-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            background-color: #002200;
+            border: 2px solid #00ff00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 0px 15px rgba(0, 255, 0, 0.8);
+            height: 100px;
+        }
+        .game-item:hover {
+            background-color: #004400;
+            transform: scale(1.05);
+            border-color: #00ff00;
+        }
+        .game-title {
+            color: #0f0;
+            text-align: center;
+            font-size: 1.2rem;
+            padding: 5px 10px;
+        }
+        #iframeContainer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+        #gameIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+        #closeButton, #fullscreenButton {
+            position: fixed;
+            bottom: 20px;  /* Change from top to bottom */
+            right: 20px;   /* Keeps it at the bottom-right */
+            background-color: #00ff00;
+            color: #000;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0px 0px 10px rgba(0, 255, 0, 0.8);
+        }
+        #fullscreenButton {
+            right: 70px;  /* Adjust for positioning of fullscreen button next to close button */
+        }
+        #closeButton:hover, #fullscreenButton:hover {
+            background-color: #00cc00;
+            box-shadow: 0px 0px 20px rgba(0, 255, 0, 1);
+        }
+    </style>
 </head>
 <body>
-<h1>Game Hub</h1>
-<input type="text" id="searchBar" placeholder="Search games..." />
+    <input type="text" id="searchBar" placeholder="Search games...">
+    <div class="game-grid" id="gameGrid"><a href="#" class="game-item" data-title="1v1.LOL" data-link="https://html.cafe/x24d7f2d2"><div class="game-title">1v1.LOL</div></a><a href="#" class="game-item" data-title="2048" data-link="https://html.cafe/xced97be4"><div class="game-title">2048</div></a><a href="#" class="game-item" data-title="60s Second Burger Run" data-link="https://html.cafe/xb1ce207a"><div class="game-title">60s Second Burger Run</div></a><a href="#" class="game-item" data-title="60s Second Santa Run" data-link="https://html.cafe/x9b325bec"><div class="game-title">60s Second Santa Run</div></a><a href="#" class="game-item" data-title="8 Ball Pool" data-link="https://html.cafe/xd9798ea8"><div class="game-title">8 Ball Pool</div></a><a href="#" class="game-item" data-title="A Small World Cup" data-link="https://html.cafe/x07c3f482"><div class="game-title">A Small World Cup</div></a><a href="#" class="game-item" data-title="Achievement Unlocked 2" data-link="https://html.cafe/x8776327b"><div class="game-title">Achievement Unlocked 2</div></a><a href="#" class="game-item" data-title="Achievement Unlocked 3" data-link="https://html.cafe/xe49070bf"><div class="game-title">Achievement Unlocked 3</div></a><a href="#" class="game-item" data-title="Achievement Unlocked" data-link="https://html.cafe/x7022f2fa"><div class="game-title">Achievement Unlocked</div></a><a href="#" class="game-item" data-title="Agar.io" data-link="https://html.cafe/x544e3feb"><div class="game-title">Agar.io</div></a><a href="#" class="game-item" data-title="Ahoy Survival" data-link="https://html.cafe/xf7afed8d"><div class="game-title">Ahoy Survival</div></a><a href="#" class="game-item" data-title="Amazing Strange Rope Police" data-link="https://html.cafe/x56ef0937"><div class="game-title">Amazing Strange Rope Police</div></a><a href="#" class="game-item" data-title="Among Us" data-link="https://html.cafe/xacf77250"><div class="game-title">Among Us</div></a><a href="#" class="game-item" data-title="Angry Bird" data-link="https://html.cafe/xc2031120"><div class="game-title">Angry Bird</div></a><a href="#" class="game-item" data-title="Aquapark.io" data-link="https://html.cafe/xf96848b6"><div class="game-title">Aquapark.io</div></a><a href="#" class="game-item" data-title="BTD" data-link="https://html.cafe/xf535c881"><div class="game-title">BTD</div></a><a href="#" class="game-item" data-title="Backrooms" data-link="https://html.cafe/xb1ce207a"><div class="game-title">Backrooms</div></a><a href="#" class="game-item" data-title="Bad Icecream" data-link="https://html.cafe/x829e1d28"><div class="game-title">Bad Icecream</div></a><a href="#" class="game-item" data-title="Baldis Basic" data-link="https://html.cafe/xbb24d780"><div class="game-title">Baldis Basic</div></a><a href="#" class="game-item" data-title="Bank Robbery" data-link="https://html.cafe/x23a7280a"><div class="game-title">Bank Robbery</div></a><a href="#" class="game-item" data-title="Basket Random" data-link="https://html.cafe/x94a9c242"><div class="game-title">Basket Random</div></a><a href="#" class="game-item" data-title="Basketball Stars" data-link="https://html.cafe/xaea1d2bc"><div class="game-title">Basketball Stars</div></a><a href="#" class="game-item" data-title="Bit Plane" data-link="https://html.cafe/x471b3bbb"><div class="game-title">Bit Plane</div></a><a href="#" class="game-item" data-title="BitLife" data-link="https://html.cafe/x6fa3e8c5"><div class="game-title">BitLife</div></a><a href="#" class="game-item" data-title="Block Blast" data-link="https://html.cafe/x19d7a18c"><div class="game-title">Block Blast</div></a><a href="#" class="game-item" data-title="Bloxorz" data-link="https://html.cafe/x1a7c8ea1"><div class="game-title">Bloxorz</div></a><a href="#" class="game-item" data-title="Bob the Robber" data-link="https://html.cafe/x2eb5ac7d"><div class="game-title">Bob the Robber</div></a><a href="#" class="game-item" data-title="Bottle Flip 3D" data-link="https://html.cafe/xdc3d9dfd"><div class="game-title">Bottle Flip 3D</div></a><a href="#" class="game-item" data-title="Boxing Random" data-link="https://html.cafe/x22a42a5e"><div class="game-title">Boxing Random</div></a><a href="#" class="game-item" data-title="Burrito Bison" data-link="https://html.cafe/x7be0ab7a"><div class="game-title">Burrito Bison</div></a><a href="#" class="game-item" data-title="CS:GO Clicker" data-link="https://html.cafe/xa376eff2"><div class="game-title">CS:GO Clicker</div></a><a href="#" class="game-item" data-title="Call of Duty - Black Ops" data-link="https://html.cafe/xb16c99e2"><div class="game-title">Call of Duty - Black Ops</div></a><a href="#" class="game-item" data-title="Capybara Clicker" data-link="https://html.cafe/xddfc6a8e"><div class="game-title">Capybara Clicker</div></a><a href="#" class="game-item" data-title="Car Crash Test" data-link="https://html.cafe/xd0fef31b"><div class="game-title">Car Crash Test</div></a><a href="#" class="game-item" data-title="Car Drawing" data-link="https://html.cafe/x8a3a958b"><div class="game-title">Car Drawing</div></a><a href="#" class="game-item" data-title="Car Survival" data-link="https://html.cafe/x4ff9d2f7"><div class="game-title">Car Survival</div></a><a href="#" class="game-item" data-title="Checkers" data-link="https://html.cafe/xc37d4577"><div class="game-title">Checkers</div></a><a href="#" class="game-item" data-title="Chess" data-link="https://html.cafe/x660cee92"><div class="game-title">Chess</div></a><a href="#" class="game-item" data-title="Chicken War" data-link="https://html.cafe/x5a12ab96"><div class="game-title">Chicken War</div></a><a href="#" class="game-item" data-title="CleanUp.io" data-link="https://html.cafe/x474dac37"><div class="game-title">CleanUp.io</div></a><a href="#" class="game-item" data-title="Cluster Rush" data-link="https://html.cafe/x2915e6b0"><div class="game-title">Cluster Rush</div></a><a href="#" class="game-item" data-title="Cookie Clicker" data-link="https://html.cafe/xe5f79f8e"><div class="game-title">Cookie Clicker</div></a><a href="#" class="game-item" data-title="Crossy Road" data-link="https://html.cafe/x0987cd16"><div class="game-title">Crossy Road</div></a><a href="#" class="game-item" data-title="Doge Miner" data-link="https://html.cafe/xef20df01"><div class="game-title">Doge Miner</div></a><a href="#" class="game-item" data-title="Doodle Jump" data-link="https://html.cafe/x5cfb5291"><div class="game-title">Doodle Jump</div></a><a href="#" class="game-item" data-title="Drift In Russia" data-link="https://html.cafe/xb08f9528"><div class="game-title">Drift In Russia</div></a><a href="#" class="game-item" data-title="Drive Mad" data-link="https://html.cafe/x53155bd7"><div class="game-title">Drive Mad</div></a><a href="#" class="game-item" data-title="Escape Road" data-link="https://html.cafe/xf5824292"><div class="game-title">Escape Road</div></a><a href="#" class="game-item" data-title="FNAF" data-link="https://html.cafe/x35eb4e78"><div class="game-title">FNAF</div></a><a href="#" class="game-item" data-title="Ginspin" data-link="https://html.cafe/x0b3350eb"><div class="game-title">Ginspin</div></a><a href="#" class="game-item" data-title="Google Dino" data-link="https://html.cafe/xe2f35239"><div class="game-title">Google Dino</div></a><a href="#" class="game-item" data-title="Granny" data-link="https://html.cafe/xd60a74a8"><div class="game-title">Granny</div></a><a href="#" class="game-item" data-title="Hole.io" data-link="https://html.cafe/x5dd814b8"><div class="game-title">Hole.io</div></a><a href="#" class="game-item" data-title="Infinite Craft" data-link="https://html.cafe/xac49551a"><div class="game-title">Infinite Craft</div></a><a href="#" class="game-item" data-title="Jetpack Joyride" data-link="https://html.cafe/xe595b18d"><div class="game-title">Jetpack Joyride</div></a><a href="#" class="game-item" data-title="Justfall.lol" data-link="https://html.cafe/xd00e9e0f"><div class="game-title">Justfall.lol</div></a><a href="#" class="game-item" data-title="Learn to Fly" data-link="https://html.cafe/x6d50c4e8"><div class="game-title">Learn to Fly</div></a><a href="#" class="game-item" data-title="MSCM" data-link="https://html.cafe/x6225bb97"><div class="game-title">MSCM</div></a><a href="#" class="game-item" data-title="Molen Playground" data-link="https://html.cafe/x8d0315a8"><div class="game-title">Molen Playground</div></a><a href="#" class="game-item" data-title="MotoX3M" data-link="https://html.cafe/x90f6f8a8"><div class="game-title">MotoX3M</div></a><a href="#" class="game-item" data-title="OvO" data-link="https://html.cafe/x4ce02684"><div class="game-title">OvO</div></a><a href="#" class="game-item" data-title="Papa’s Pizzeria" data-link="https://html.cafe/x886ce87b"><div class="game-title">Papa’s Pizzeria</div></a><a href="#" class="game-item" data-title="Paper.io 2" data-link="https://html.cafe/xd243fd55"><div class="game-title">Paper.io 2</div></a><a href="#" class="game-item" data-title="Ragdoll Archers" data-link="https://html.cafe/xdf252d7c"><div class="game-title">Ragdoll Archers</div></a><a href="#" class="game-item" data-title="Retro Bowl" data-link="https://html.cafe/x1693cbf5"><div class="game-title">Retro Bowl</div></a><a href="#" class="game-item" data-title="Rocket League" data-link="https://html.cafe/xa0e4da39"><div class="game-title">Rocket League</div></a><a href="#" class="game-item" data-title="Run 2" data-link="https://html.cafe/x41021f9c"><div class="game-title">Run 2</div></a><a href="#" class="game-item" data-title="Slither.io" data-link="https://html.cafe/xb50973be"><div class="game-title">Slither.io</div></a><a href="#" class="game-item" data-title="Slope" data-link="https://html.cafe/xea9fd68b"><div class="game-title">Slope</div></a><a href="#" class="game-item" data-title="Snow Rider 3D" data-link="https://html.cafe/x321ed45f"><div class="game-title">Snow Rider 3D</div></a><a href="#" class="game-item" data-title="Soccer Random" data-link="https://html.cafe/x72322a1e"><div class="game-title">Soccer Random</div></a><a href="#" class="game-item" data-title="Sprunki" data-link="https://html.cafe/xf9257001"><div class="game-title">Sprunki</div></a><a href="#" class="game-item" data-title="Stickman Hook" data-link="https://html.cafe/xba2e1268"><div class="game-title">Stickman Hook</div></a><a href="#" class="game-item" data-title="Subway Surfers" data-link="https://html.cafe/xa13664d4"><div class="game-title">Subway Surfers</div></a><a href="#" class="game-item" data-title="Super Hot" data-link="https://html.cafe/x1f6e0335"><div class="game-title">Super Hot</div></a><a href="#" class="game-item" data-title="Super Mario Bros." data-link="https://html.cafe/x967d4495"><div class="game-title">Super Mario Bros.</div></a><a href="#" class="game-item" data-title="The Impossible Quiz" data-link="https://html.cafe/x687c84dd"><div class="game-title">The Impossible Quiz</div></a><a href="#" class="game-item" data-title="There Is No Game" data-link="https://html.cafe/x0b61b5c1"><div class="game-title">There Is No Game</div></a><a href="#" class="game-item" data-title="Tiny Fishing" data-link="https://html.cafe/xc4a97eb7"><div class="game-title">Tiny Fishing</div></a><a href="#" class="game-item" data-title="Wordle" data-link="https://html.cafe/x58bb19db"><div class="game-title">Wordle</div></a></div>
 
-<div class="game-list" id="gameList"></div>
+    <div id="iframeContainer">
+        <button id="closeButton" aria-label="Close Game">X</button>
+        <button id="fullscreenButton" aria-label="Fullscreen">⛶</button>
+        <iframe id="gameIframe" src="" frameborder="0"></iframe>
+    </div>
 
-<div id="iframeContainer">
-  <button id="closeButton" onclick="closeIframe()">Close</button>
-  <iframe id="gameIframe" src="" frameborder="0"></iframe>
-</div>
-
-<script>
-const games = [
+    <script>
+        const games = [
   { title: "1v1", link: "g/1v1.html" },
   { title: "2048", link: "https://script.google.com/macros/s/AKfycbwgo9fzGlgbzqpBKfXrw7gGGvg8cYPPL-ycgd_y9jKePSDVnk_zr_keYn8v-0eUJQd5/exec" },
   { title: "60s Santa Run", link: "g/60santarun.html" },
   { title: "60s Battle Royale", link: "g/60sbr.html" },
   { title: "8 Ball", link: "g/8ball.html" },
-  { title: "AA1", link: "g/aa1.html" },
-  { title: "AA2", link: "g/aa2.html" },
-  { title: "AA3", link: "g/aa3.html" },
+  { title: "Achievement Unlocked", link: "g/aa1.html" },
+  { title: "Achievement Unlocked 2", link: "g/aa2.html" },
+  { title: "Achievement Unlocked3", link: "g/aa3.html" },
   { title: "Agario", link: "g/agario.html" },
   { title: "Ahoy", link: "g/ahoy.html" },
   { title: "Among Us", link: "g/amongus.html" },
-  { title: "AMSRP", link: "g/amsrp.html" },
+  { title: "A Small World Cup", link: "g/amsrp.html" },
   { title: "Angry Bird", link: "g/angrybird.html" },
   { title: "Aquapark.io", link: "g/aquaparkio.html" },
-  { title: "ASWC", link: "g/aswc.html" },
+  { title: "Amazing Strange Rope Police", link: "g/aswc.html" },
   { title: "Backrooms", link: "g/backrooms.html" },
   { title: "Bad Ice Cream", link: "g/badicecream.html" },
   { title: "Baldi's Basics", link: "g/baldisbasic.html" },
@@ -115,7 +158,7 @@ const games = [
   { title: "Chicken War", link: "g/chickenwar.html" },
   { title: "Cleanup.io", link: "g/cleanupio.html" },
   { title: "Cluster Rush", link: "g/clusterrush.html" },
-  { title: "COD Black Opps", link: "g/codblackopps.html" },
+  { title: "COD - Black Opps", link: "g/codblackopps.html" },
   { title: "Cookie Clicker", link: "g/cookieclicker.html" },
   { title: "Crossy Road", link: "g/crossyroad.html" },
   { title: "CSGO Clicker", link: "g/csgoclicker.html" },
@@ -155,37 +198,75 @@ const games = [
   { title: "There is No Game", link: "g/thereisnogame.html" },
   { title: "Tiny Fishing", link: "g/tinyfishing.html" },
   { title: "Wordle", link: "g/wordle.html" }
-];
+        ];
 
-const gameList = document.getElementById("gameList");
-games.forEach(game => {
-  const div = document.createElement("div");
-  div.className = "game-item";
-  div.textContent = game.title;
-  div.onclick = () => openIframe(game.link);
-  gameList.appendChild(div);
-});
+        function displayGames(filteredGames = games) {
+            const gameGrid = document.getElementById("gameGrid");
+            gameGrid.innerHTML = "";
+            filteredGames.forEach(game => {
+                let gameItem = document.createElement("a");
+                gameItem.href = "#";
+                gameItem.classList.add("game-item");
+                gameItem.setAttribute("data-title", game.title);
+                gameItem.setAttribute("data-link", game.link);
+                gameItem.innerHTML = `<div class="game-title">${game.title}</div>`;
+                gameItem.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    openIframe(game.link);
+                });
+                gameGrid.appendChild(gameItem);
+            });
+        }
 
-function openIframe(link) {
-  const iframeContainer = document.getElementById("iframeContainer");
-  const gameIframe = document.getElementById("gameIframe");
-  iframeContainer.style.display = "flex";
-  gameIframe.src = link;
-}
+        function openIframe(link) {
+            const iframeContainer = document.getElementById("iframeContainer");
+            const gameIframe = document.getElementById("gameIframe");
+            iframeContainer.style.display = "flex";
+            gameIframe.src = link;
+        }
 
-function closeIframe() {
-  const iframeContainer = document.getElementById("iframeContainer");
-  const gameIframe = document.getElementById("gameIframe");
-  iframeContainer.style.display = "none";
-  gameIframe.src = "";
-}
+        function searchGames() {
+            const query = document.getElementById("searchBar").value.toLowerCase();
+            const filteredGames = games.filter(game => game.title.toLowerCase().includes(query));
+            displayGames(filteredGames);
+        }
 
-document.getElementById("searchBar").addEventListener("input", e => {
-  const value = e.target.value.toLowerCase();
-  document.querySelectorAll(".game-item").forEach(item => {
-    item.style.display = item.textContent.toLowerCase().includes(value) ? "flex" : "none";
-  });
-});
-</script>
-</body>
-</html>
+        document.getElementById("searchBar").addEventListener("input", searchGames);
+
+        document.getElementById('closeButton').addEventListener('click', function () {
+            document.getElementById("iframeContainer").style.display = "none";
+            document.getElementById("gameIframe").src = "";
+        });
+
+        document.getElementById('fullscreenButton').addEventListener('click', function () {
+            let iframeContainer = document.getElementById("iframeContainer");
+            if (iframeContainer.requestFullscreen) {
+                iframeContainer.requestFullscreen();
+            } else if (iframeContainer.mozRequestFullScreen) {
+                iframeContainer.mozRequestFullScreen();
+            } else if (iframeContainer.webkitRequestFullscreen) {
+                iframeContainer.webkitRequestFullscreen();
+            } else if (iframeContainer.msRequestFullscreen) {
+                iframeContainer.msRequestFullscreen();
+            }
+            this.style.display = 'none';
+            document.getElementById('closeButton').style.display = 'none';
+        });
+
+        document.addEventListener("fullscreenchange", function () {
+            if (!document.fullscreenElement) {
+                document.getElementById('fullscreenButton').style.display = 'flex';
+                document.getElementById('closeButton').style.display = 'flex';
+            }
+        });
+
+        // Display all games on initial load
+        displayGames();
+    </script>
+
+
+
+
+<script defer="" data-domain="html.cafe" src="https://milkymouse.com/js/script.js"></script>
+
+   </body></html>
