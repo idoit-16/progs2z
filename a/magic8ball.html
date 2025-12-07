@@ -1,0 +1,112 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic 8 Ball</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            text-align: center;
+            background-color: #282c36;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+        #container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #eight-ball {
+            width: 200px;
+            height: 200px;
+            background-color: black;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease-in-out;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+        #eight-ball:hover {
+            transform: scale(1.2);
+        }
+        #eight-ball:active {
+            transform: scale(1.1);
+        }
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes shake {
+            0% { transform: translate(0px, 0px) rotate(0deg); }
+            25% { transform: translate(3px, 3px) rotate(3deg); }
+            50% { transform: translate(-3px, -3px) rotate(-3deg); }
+            75% { transform: translate(3px, -3px) rotate(3deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
+        }
+        #moving-text {
+            position: absolute;
+            width: 100%;
+            top: 20px;
+            white-space: nowrap;
+            overflow: hidden;
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFD700;
+            animation: moveText 10s linear infinite;
+        }
+        @keyframes moveText {
+            from {
+                transform: translateX(100%);
+            }
+            to {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="moving-text">✨ Welcome to the Magic 8 Ball! Ask your question and click the ball! Made by ProGS2Z✨</div>
+    <div id="container">
+        <div id="eight-ball" onclick="shakeBall()">
+            <span>8</span>
+        </div>
+        <p id="answer"></p>
+    </div>
+
+    <script>
+        const quotes = [
+            "🎉 Yes, absolutely! 🎉", 
+            "❌ No way! ❌", 
+            "🤔 Hmm... Maybe? 🤔", 
+            "⏳ Ask again later! ⏳", 
+            "🌟 Definitely! 🌟", 
+            "🙅&zwj;♂️ I don't think so... 🙅&zwj;♀️", 
+            "🔮 Most likely! 🔮", 
+            "🚫 Absolutely not! 🚫", 
+            "✅ It is certain! ✅", 
+            "😕 Very doubtful... 😕"
+        ];
+
+        function shakeBall() {
+            const ball = document.getElementById("eight-ball");
+            ball.classList.add("shake");
+            setTimeout(() => ball.classList.remove("shake"), 500);
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            document.getElementById("answer").innerText = quotes[randomIndex];
+        }
+    </script>
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;94c79d4d951745d085049dd7f2bbd8f8&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
+
+
+<script defer="" data-domain="html.cafe" src="https://milkymouse.com/js/script.js"></script>
+
+   </body></html>
