@@ -1,0 +1,135 @@
+<html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacker Calendar</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Courier New', monospace;
+      background-color: transparent;
+      color: #00ff00;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #vanta-bg {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .calendar {
+      padding: 30px;
+      border: 3px solid #00ff00;
+      border-radius: 16px;
+      box-shadow: 0 0 35px #00ff00;
+      width: 600px;
+      background: transparent;
+    }
+
+    .calendar h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+    }
+
+    .calendar-grid div {
+      border: 1px solid #00ff00;
+      padding: 15px;
+      text-align: center;
+      border-radius: 6px;
+    }
+
+    .calendar-header {
+      font-weight: bold;
+      background-color: #00ff00;
+      color: black;
+    }
+
+    .today {
+      background-color: #00ff00;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <div id="vanta-bg"><canvas class="vanta-canvas" width="635" height="645" style="display: block; position: absolute; z-index: 0; top: 0px; left: 0px; width: 635px; height: 645px;"></canvas></div>
+
+  <div class="calendar">
+    <h1 id="month-year">December 2025</h1>
+    <div class="calendar-grid" id="calendar">
+      <div class="calendar-header">Sun</div>
+      <div class="calendar-header">Mon</div>
+      <div class="calendar-header">Tue</div>
+      <div class="calendar-header">Wed</div>
+      <div class="calendar-header">Thu</div>
+      <div class="calendar-header">Fri</div>
+      <div class="calendar-header">Sat</div>
+    <div></div><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div class="today">7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div><div>15</div><div>16</div><div>17</div><div>18</div><div>19</div><div>20</div><div>21</div><div>22</div><div>23</div><div>24</div><div>25</div><div>26</div><div>27</div><div>28</div><div>29</div><div>30</div><div>31</div></div>
+  </div>
+
+  <script>
+    VANTA.NET({
+      el: "#vanta-bg",
+      mouseControls: true,
+      touchControls: true,
+      minHeight: 200.00,
+      minWidth: 200.00,
+      scale: 1.0,
+      scaleMobile: 1.0,
+      color: 0x00ff00,
+      backgroundColor: 0x000000
+    });
+
+    const calendar = document.getElementById("calendar");
+    const monthYear = document.getElementById("month-year");
+
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const today = date.getDate();
+
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    monthYear.textContent = `${monthNames[month]} ${year}`;
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    for (let i = 0; i < firstDay; i++) {
+      const empty = document.createElement("div");
+      calendar.appendChild(empty);
+    }
+
+    for (let i = 1; i <= daysInMonth; i++) {
+      const day = document.createElement("div");
+      day.textContent = i;
+      if (i === today) day.classList.add("today");
+      calendar.appendChild(day);
+    }
+  </script>
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;94c79d4d951745d085049dd7f2bbd8f8&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
+
+
+<script defer="" data-domain="html.cafe" src="https://milkymouse.com/js/script.js"></script>
+
+   </body></html>
