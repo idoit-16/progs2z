@@ -1,0 +1,410 @@
+<html lang="en"><head><link rel="shortcut icon" type="image/png" href="google.com">
+
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZXS CODE EDITOR</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .sidebar {
+      width: 20%;
+      background-color: #252526;
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+    }
+    .sidebar button {
+      background: none;
+      color: #d4d4d4;
+      border: none;
+      padding: 10px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .sidebar button:hover {
+      background-color: #3a3d41;
+    }
+    .files {
+      margin-top: 20px;
+      flex-grow: 1;
+    }
+    .files div {
+      padding: 5px 10px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+    }
+    .files div:hover {
+      background-color: #3a3d41;
+    }
+    .editor {
+      flex-grow: 1;
+      background-color: #1e1e1e;
+      display: flex;
+      flex-direction: column;
+    }
+    #code {
+      flex-grow: 1;
+      background-color: #1e1e1e;
+      border: none;
+      color: #d4d4d4;
+      font-family: 'Courier New', monospace;
+      font-size: 16px;
+      padding: 10px;
+      outline: none;
+      white-space: pre;
+      overflow-wrap: break-word;
+    }
+    .bottom-bar {
+      display: flex;
+      justify-content: flex-end;
+      padding: 10px;
+      background-color: #252526;
+    }
+    .bottom-bar button {
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .bottom-bar button:hover {
+      background-color: #005f99;
+    }
+    iframe {
+      width: 100%;
+      height: 50%;
+      border: none;
+    }
+    .resize-bar {
+      cursor: ns-resize;
+      background-color: #333;
+      height: 5px;
+    }
+    .search-bar {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #252526;
+      padding: 20px;
+      border-radius: 8px;
+      display: none;
+      flex-direction: column;
+      width: 300px;
+    }
+    .search-bar input {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      outline: none;
+    }
+    .search-bar input::placeholder {
+      color: #757575;
+    }
+    .search-bar button {
+      margin-top: 10px;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .search-bar button:hover {
+      background-color: #005f99;
+    }
+    .highlight {
+      background-color: #272822;
+      color: #f8f8f2;
+    }
+    .keyword {
+      color: #66d9ef;
+    }
+    .string {
+      color: #e6db74;
+    }
+    .comment {
+      color: #75715e;
+    }
+    .image-preview {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+    /* New AI button style */
+    .ai-button {
+      background-color: #24292f;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+    .ai-button:hover {
+      background-color: #2c3138;
+    }
+    .ai-button i {
+      margin-right: 10px;
+    }
+
+    /* AI Chatbot iframe container */
+    .ai-chatbot-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 375px;
+      height: 667px;
+      background-color: #fff;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: none;
+      overflow: hidden;
+      z-index: 1000;
+    }
+    .ai-chatbot-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    .ai-chatbot-container .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <button id="new-file"><i class="fas fa-file"></i> New File</button>
+    <button id="upload-file"><i class="fas fa-upload"></i> Upload File</button>
+    <button id="upload-image"><i class="fas fa-image"></i> Upload Image</button>
+    <div class="files" id="files">
+      <!-- Files will be listed here -->
+    </div>
+    <!-- New AI Button -->
+    <button class="ai-button" id="ai-button"><i class="fas fa-robot"></i> AI</button>
+    <button id="download-all"><i class="fas fa-download"></i> Download All Files</button>
+  </div>
+
+  <div class="editor">
+    <textarea id="code" placeholder="Write your code here..."></textarea>
+    <div class="resize-bar" id="resize-bar"></div>
+    <iframe id="preview"></iframe>
+    <div class="bottom-bar">
+      <button id="run-files">Run Files</button>
+    </div>
+  </div>
+
+  <!-- AI Chatbot Iframe -->
+  <div class="ai-chatbot-container" id="ai-chatbot-container">
+    <button class="close-btn" id="close-chatbot">X</button>
+    <iframe src="https://playervpn.github.io/chatbot/ai-coder"></iframe>
+  </div>
+
+  <script>
+    const aiButton = document.getElementById('ai-button');
+    const aiChatbotContainer = document.getElementById('ai-chatbot-container');
+    const closeChatbotButton = document.getElementById('close-chatbot');
+
+    // Toggle the AI chatbot iframe visibility
+    aiButton.addEventListener('click', () => {
+      aiChatbotContainer.style.display = 'block';
+    });
+
+    // Close the AI chatbot iframe
+    closeChatbotButton.addEventListener('click', () => {
+      aiChatbotContainer.style.display = 'none';
+    });
+
+    // File management and other features remain as before...
+    const files = [];
+    const filesDiv = document.getElementById('files');
+    const codeEditor = document.getElementById('code');
+    const preview = document.getElementById('preview');
+    const resizeBar = document.getElementById('resize-bar');
+    const searchBar = document.getElementById('search-bar');
+    const folderNameInput = document.getElementById('folder-name');
+    const downloadAllButton = document.getElementById('download-all');
+    const imageUploadButton = document.getElementById('upload-image');
+    let isResizing = false;
+
+    // Add a new file
+    document.getElementById('new-file').addEventListener('click', () => {
+      const fileName = prompt('File name (e.g., index.html, script.js):', 'index.html');
+      if (fileName) {
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        if (['html', 'js', 'css', 'txt'].includes(fileExtension)) {
+          files.push({ name: fileName, content: '' });
+          updateFilesList();
+        } else {
+          alert('Invalid file extension. Please use .html, .js, .css, or .txt.');
+        }
+      }
+    });
+
+    // Upload a file
+    document.getElementById('upload-file').addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = '.html,.css,.js,.txt';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+          files.push({ name: file.name, content: reader.result });
+          updateFilesList();
+        };
+        reader.readAsText(file);
+      };
+      input.click();
+    });
+
+    // Upload an image
+    imageUploadButton.addEventListener('click', () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = () => {
+          const imgElement = document.createElement('img');
+          imgElement.src = reader.result;
+          imgElement.classList.add('image-preview');
+          files.push({ name: file.name, content: reader.result });
+          updateFilesList();
+        };
+        reader.readAsDataURL(file);
+      };
+      input.click();
+    });
+
+    // Update the list of files
+    function updateFilesList() {
+      filesDiv.innerHTML = '';
+      files.forEach((file, index) => {
+        const fileDiv = document.createElement('div');
+        fileDiv.textContent = file.name;
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'X';
+        removeButton.onclick = (e) => {
+          e.stopPropagation();
+          files.splice(index, 1);
+          updateFilesList();
+        };
+        fileDiv.appendChild(removeButton);
+        fileDiv.addEventListener('click', () => openFile(index));
+        filesDiv.appendChild(fileDiv);
+      });
+    }
+
+    // Open a file
+    function openFile(index) {
+      const file = files[index];
+      if (file.content !== null) {
+        codeEditor.value = file.content;
+        codeEditor.oninput = () => {
+          files[index].content = codeEditor.value;
+          updatePreview();
+        };
+        updatePreview();
+      }
+    }
+
+    // Update the preview iframe live
+    function updatePreview() {
+      const htmlContent = files.find(file => file.name.endsWith('.html'))?.content || '';
+      const cssContent = files.find(file => file.name.endsWith('.css'))?.content || '';
+      const jsContent = files.find(file => file.name.endsWith('.js'))?.content || '';
+
+      const blob = new Blob([
+        `<html>
+          <head>
+            <style>${cssContent}</style>
+          </head>
+          <body>
+            ${htmlContent}
+            <script>${jsContent}<\/script>
+          </body>
+        </html>`
+      ], { type: 'text/html' });
+
+      preview.src = URL.createObjectURL(blob);
+    }
+
+    // Run files
+    document.getElementById('run-files').addEventListener('click', updatePreview);
+
+    // Download all files as a ZIP
+    downloadAllButton.addEventListener('click', () => {
+      const zip = new JSZip();
+      files.forEach(file => {
+        if (file.content !== null) {
+          zip.file(file.name, file.content);
+        }
+      });
+      zip.generateAsync({ type: 'blob' }).then(content => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(content);
+        link.download = 'files.zip';
+        link.click();
+      });
+    });
+
+    // Resize iframe
+    resizeBar.addEventListener('mousedown', () => {
+      isResizing = true;
+      document.addEventListener('mousemove', handleResize);
+      document.addEventListener('mouseup', () => {
+        isResizing = false;
+        document.removeEventListener('mousemove', handleResize);
+      });
+    });
+
+    function handleResize(e) {
+      if (isResizing) {
+        const newHeight = window.innerHeight - e.clientY;
+        preview.style.height = `${newHeight}px`;
+        codeEditor.style.height = `${window.innerHeight - newHeight - 50}px`;
+      }
+    }
+  </script>
+<script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;version&quot;:&quot;2024.11.0&quot;,&quot;token&quot;:&quot;94c79d4d951745d085049dd7f2bbd8f8&quot;,&quot;r&quot;:1,&quot;server_timing&quot;:{&quot;name&quot;:{&quot;cfCacheStatus&quot;:true,&quot;cfEdge&quot;:true,&quot;cfExtPri&quot;:true,&quot;cfL4&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfSpeedBrain&quot;:true},&quot;location_startswith&quot;:null}}" crossorigin="anonymous"></script>
+
+
+
+
+<script defer="" data-domain="html.cafe" src="https://milkymouse.com/js/script.js"></script>
+
+   </body></html>
