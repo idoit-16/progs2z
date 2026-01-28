@@ -37,7 +37,7 @@
       display: flex;
       flex-direction: column;
       padding-top: 10px;
-      padding-bottom: 0; /* bottom handled by settings icon */
+      padding-bottom: 0;
       transform: translateX(-100%);
       animation: slideIn 0.6s ease-out forwards, pulseGlow 3s infinite;
       z-index: 100;
@@ -126,12 +126,13 @@
     /* ===== SETTINGS BUTTON (MAGNETIC) ===== */
     .settings-icon {
       position: absolute;
-      bottom: 20px;       /* always 20px from bottom */
+      bottom: 20px;
       display: flex;
       justify-content: center;
       width: 100%;
       cursor: pointer;
-      z-index: 150;
+      z-index: 9999;
+      pointer-events: auto;
     }
 
     .settings-icon img {
@@ -172,8 +173,9 @@
       backdrop-filter: blur(12px);
       padding:40px;
       display:none;
-      z-index:200;
-      color:var(--neon);
+      z-index: 10000;
+      color: var(--neon);
+      overflow-y: auto;
     }
 
     .console-title {
@@ -268,7 +270,9 @@
   <h3 class="console-title">SYSTEM CONSOLE</h3>
   <input id="tab-name" placeholder="Tab Title">
   <input id="favicon-url" placeholder="Favicon URL">
-  <button class="settings-btn" onclick="applyTabCloak()">ENGAGE TAB CLOAK</button>
+  <button class="settings-btn" onclick="applyTabCloak()">Apply Tab Cloak</button>
+  <div class="separator"></div>
+  <button class="settings-btn" onclick="openAboutBlank()">Open about:blank</button>
 </div>
 
 <iframe id="contentFrame" src="home.html"></iframe>
@@ -288,7 +292,14 @@
 
   function toggleSettings() {
     const p = document.getElementById('settingsPanel');
-    p.style.display = p.style.display === 'block' ? 'none' : 'block';
+    const iframe = document.getElementById('contentFrame');
+    if (p.style.display === 'block') {
+      p.style.display = 'none';
+      iframe.style.pointerEvents = 'auto';
+    } else {
+      p.style.display = 'block';
+      iframe.style.pointerEvents = 'none';
+    }
   }
 
   function showToast(msg) {
@@ -299,9 +310,31 @@
   }
 
   function applyTabCloak() {
-    document.title = tab-name.value;
-    document.querySelector('link[rel="icon"]').href = favicon-url.value;
-    showToast('TAB CLOAK ENGAGED');
+    const tabName = document.getElementById('tab-name').value;
+    const faviconUrl = document.getElementById('favicon-url').value;
+
+    if(tabName && faviconUrl){
+      document.title = tabName;
+      const link = document.querySelector('link[rel="icon"]');
+      if(link) link.href = faviconUrl;
+      showToast('TAB CLOAK ENGAGED');
+    } else {
+      showToast('Please enter both Tab Name and Favicon URL');
+    }
+  }
+
+  function openAboutBlank() {
+    const gameUrl = 'https://idoit-16.github.io/progs2z/';
+    const win = window.open('about:blank', '_blank');
+    win.document.write(`
+      <html>
+        <head><title>Math Work</title></head>
+        <body style="margin:0; background:#000;">
+          <iframe src="${gameUrl}" width="100%" height="100%" style="border:none;"></iframe>
+        </body>
+      </html>
+    `);
+    win.document.close();
   }
 
   window.addEventListener('keydown', e => {
