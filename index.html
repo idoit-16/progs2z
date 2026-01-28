@@ -1,329 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-	<meta charset="UTF-8" />
-	<title>𝙋𝙧𝙤𝙂𝙎2𝙕™</title>
-	<link rel="icon" type="image/png" href="https://i.postimg.cc/d1rW7h0y/PFP.png" />
-	<style>
-		body,
-		html {
-			margin: 0;
-			padding: 0;
-			height: 100%;
-			background: #121212;
-			color: white;
-			font-family: 'Courier New', monospace;
-			cursor: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 fill=%22none%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2214%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3Cpath d=%22M16 8v16M8 16h16%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3C/svg%3E') 16 16, auto;
-			overflow: hidden;
-		}
+  <meta charset="UTF-8" />
+  <title>𝙋𝙧𝙤𝙂𝙎2𝙕™</title>
+  <link rel="icon" type="image/png" href="https://i.postimg.cc/d1rW7h0y/PFP.png" />
 
-		/* === Apple Glass Navbar === */
-		.navbar {
-			width: 70px;
-			height: 100vh;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			align-items: center;
-			padding: 10px 0;
-			position: fixed;
-			top: 0;
-			left: 0;
-			z-index: 100;
+  <style>
+    :root {
+      --neon: #00ff00;
+      --neon-soft: rgba(0,255,0,0.4);
+    }
 
-			/* ✨ Apple-style translucent glass effect */
-			background: rgba(0, 0, 0, 0.35);
-			backdrop-filter: blur(20px) saturate(180%);
-			-webkit-backdrop-filter: blur(20px) saturate(180%);
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: #121212;
+      color: white;
+      font-family: 'Courier New', monospace;
+      overflow: hidden;
+      cursor: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22%3E%3Ccircle cx=%2216%22 cy=%2216%22 r=%2214%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3Cpath d=%22M16 8v16M8 16h16%22 stroke=%22%2300ff00%22 stroke-width=%223%22/%3E%3C/svg%3E') 16 16, auto;
+    }
 
-			/* Futuristic green glow border */
-			border-right: 2px solid rgba(0, 255, 0, 0.4);
-			box-shadow: 2px 0 25px rgba(0, 255, 0, 0.25);
+    /* ===== NAVBAR ===== */
+    .navbar {
+      width: 70px;
+      height: 100vh;
+      min-height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-right: 2px solid var(--neon-soft);
+      box-shadow: 0 0 25px var(--neon-soft);
+      display: flex;
+      flex-direction: column;
+      padding-top: 10px;
+      padding-bottom: 0; /* bottom handled by settings icon */
+      transform: translateX(-100%);
+      animation: slideIn 0.6s ease-out forwards, pulseGlow 3s infinite;
+      z-index: 100;
+    }
 
-			/* Smooth slide-in animation */
-			transform: translateX(-100%);
-			animation: slideIn 0.6s ease-out forwards;
-		}
+    @keyframes slideIn {
+      to { transform: translateX(0); }
+    }
 
-		@keyframes slideIn {
-			to {
-				transform: translateX(0);
-			}
-		}
+    @keyframes pulseGlow {
+      0%,100% { box-shadow: 0 0 12px var(--neon-soft); }
+      50% { box-shadow: 0 0 30px var(--neon); }
+    }
 
-		/* Animated light streak shimmer */
-		.navbar::before {
-			content: "";
-			position: absolute;
-			top: -100%;
-			left: 0;
-			width: 100%;
-			height: 200%;
-			background: linear-gradient(rgba(0, 255, 0, 0.15),
-					rgba(0, 255, 0, 0) 60%,
-					rgba(0, 255, 0, 0.1));
-			animation: shimmer 6s infinite linear;
-			pointer-events: none;
-		}
+    .navbar::before {
+      content:"";
+      position:absolute;
+      top:-100%;
+      width:100%;
+      height:200%;
+      background:linear-gradient(rgba(0,255,0,0.15),transparent 60%);
+      animation: shimmer 6s linear infinite;
+      pointer-events:none;
+    }
 
-		@keyframes shimmer {
-			0% {
-				transform: translateY(-50%);
-			}
+    @keyframes shimmer {
+      from { transform: translateY(-50%); }
+      to { transform: translateY(50%); }
+    }
 
-			100% {
-				transform: translateY(50%);
-			}
-		}
+    .left-content {
+      color: var(--neon);
+      font-size: 12px;
+      text-align: center;
+      user-select: none;
+    }
 
-		.navbar .left-content {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			gap: 8px;
-			color: #00ff00;
-			font-weight: bold;
-			font-size: 13px;
-			padding-top: 10px;
-			user-select: none;
-			text-align: center;
-		}
+    .left-content img {
+      width: 34px;
+      border-radius: 8px;
+      margin-bottom: 6px;
+    }
 
-		.navbar .left-content img {
-			width: 34px;
-			height: 34px;
-			border-radius: 8px;
-		}
+    /* CENTER BUTTONS */
+    .nav-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+    }
 
-		.navbar .nav-buttons {
-			display: flex;
-			flex-direction: column;
-			gap: 15px;
-			flex-grow: 1;
-			justify-content: center;
-			align-items: center;
-		}
+    .icon-btn {
+      background:none;
+      border:none;
+      cursor:pointer;
+      position:relative;
+    }
 
-		.navbar .icon-btn {
-			background: none;
-			border: none;
-			margin: 0;
-			cursor: pointer;
-			transition: transform 0.2s ease, filter 0.2s ease;
-			filter: brightness(0) saturate(100%) invert(64%) sepia(100%) saturate(7473%) hue-rotate(88deg) brightness(104%) contrast(107%);
-		}
+    .icon-btn img {
+      width:28px;
+      transition: transform .3s, filter .3s;
+      filter: invert(63%) sepia(98%) saturate(500%) hue-rotate(80deg);
+    }
 
-		.navbar .icon-btn img {
-			width: 28px;
-			height: 28px;
-			filter: brightness(0) saturate(100%) invert(67%) sepia(99%) saturate(662%) hue-rotate(67deg) brightness(102%) contrast(102%);
-			transition: transform 0.3s ease, filter 0.3s ease;
-		}
+    .icon-btn:hover img {
+      transform: scale(1.25) rotate(3deg);
+      filter: drop-shadow(0 0 8px var(--neon));
+    }
 
-		.navbar .icon-btn:hover img {
-			transform: scale(1.2) rotate(3deg);
-			filter: drop-shadow(0 0 6px #00ff00);
-		}
+    .icon-btn::after {
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(0,255,0,.4), transparent 60%);
+      opacity:0;
+      transition:.3s;
+    }
 
-		.settings-icon {
-			margin-bottom: 10px;
-			cursor: pointer;
-		}
+    .icon-btn:hover::after {
+      opacity:1;
+    }
 
-		.settings-icon img {
-			width: 28px;
-			height: 28px;
-			filter: brightness(0) saturate(100%) invert(67%) sepia(99%) saturate(662%) hue-rotate(67deg) brightness(102%) contrast(102%);
-			transition: all 0.3s ease;
-		}
+    /* ===== SETTINGS BUTTON (MAGNETIC) ===== */
+    .settings-icon {
+      position: absolute;
+      bottom: 20px;       /* always 20px from bottom */
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      cursor: pointer;
+      z-index: 150;
+    }
 
-		.settings-icon:hover img {
-			transform: rotate(30deg) scale(1.1);
-			filter: drop-shadow(0 0 6px #00ff00);
-		}
+    .settings-icon img {
+      width: 28px;
+      filter: invert(63%) sepia(98%) saturate(500%) hue-rotate(80deg);
+      transition: transform .3s, filter .3s;
+    }
 
-		iframe {
-			position: absolute;
-			top: 0;
-			left: 70px;
-			width: calc(100% - 70px);
-			height: 100vh;
-			border: none;
-		}
+    .settings-icon:hover img {
+      transform: rotate(30deg) scale(1.1);
+      filter: drop-shadow(0 0 8px var(--neon));
+    }
 
-		.settings-panel {
-			position: fixed;
-			top: 0;
-			left: 70px;
-			width: calc(100% - 70px);
-			height: 100vh;
-			background: rgba(0, 0, 0, 0.85);
-			backdrop-filter: blur(12px);
-			padding: 40px;
-			display: none;
-			z-index: 200;
-			box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
-			overflow-y: auto;
-			color: #00ff00;
-			animation: fadeIn 0.3s ease;
-		}
+    /* ===== IFRAME ===== */
+    iframe {
+      position:absolute;
+      left:70px;
+      top:0;
+      width:calc(100% - 70px);
+      height:100vh;
+      border:none;
+      transition: opacity .4s, filter .4s;
+    }
 
-		@keyframes fadeIn {
-			from {
-				opacity: 0;
-			}
+    iframe.loading {
+      opacity:0;
+      filter: blur(10px) brightness(.6);
+    }
 
-			to {
-				opacity: 1;
-			}
-		}
+    /* ===== SETTINGS PANEL ===== */
+    .settings-panel {
+      position:fixed;
+      left:70px;
+      top:0;
+      width:calc(100% - 70px);
+      height:100vh;
+      background:rgba(0,0,0,.85);
+      backdrop-filter: blur(12px);
+      padding:40px;
+      display:none;
+      z-index:200;
+      color:var(--neon);
+    }
 
-		.settings-btn {
-			display: block;
-			background: rgba(0, 0, 0, 0.5);
-			color: #00ff00;
-			padding: 15px;
-			border: 1px solid #00ff00;
-			border-radius: 10px;
-			margin: 10px 0;
-			font-size: 16px;
-			text-align: center;
-			text-transform: uppercase;
-			cursor: pointer;
-			transition: background 0.3s ease, transform 0.2s ease;
-		}
+    .console-title {
+      text-align:center;
+      letter-spacing:3px;
+      animation: glitch 2s infinite;
+    }
 
-		.settings-btn:hover {
-			background-color: #00ff00;
-			color: #121212;
-			transform: scale(1.05);
-		}
+    @keyframes glitch {
+      0%{text-shadow:2px 0 var(--neon);}
+      50%{text-shadow:-2px 0 var(--neon);}
+      100%{text-shadow:2px 0 var(--neon);}
+    }
 
-		input {
-			width: 100%;
-			padding: 10px;
-			margin-bottom: 10px;
-			border: 2px solid #00ff00;
-			color: #00ff00;
-			background-color: #121212;
-			border-radius: 5px;
-		}
+    input {
+      width:100%;
+      padding:10px;
+      background:#121212;
+      border:2px solid var(--neon);
+      color:var(--neon);
+      border-radius:5px;
+      margin-bottom:10px;
+    }
 
-		.tab-cloak-container {
-			display: flex;
-			align-items: center;
-			gap: 20px;
-		}
+    .settings-btn {
+      width:100%;
+      padding:15px;
+      background:rgba(0,0,0,.5);
+      color:var(--neon);
+      border:1px solid var(--neon);
+      border-radius:10px;
+      cursor:pointer;
+      margin:10px 0;
+      transition:.3s;
+    }
 
-		.tab-cloak-container input {
-			width: 45%;
-		}
+    .settings-btn:hover {
+      background:var(--neon);
+      color:#000;
+      transform:scale(1.05);
+    }
 
-		.separator {
-			border-top: 2px solid #00ff00;
-			margin: 20px 0;
-		}
-	</style>
+    /* ===== TOAST ===== */
+    #toast {
+      position:fixed;
+      bottom:20px;
+      right:20px;
+      padding:12px 18px;
+      border:1px solid var(--neon);
+      background:rgba(0,0,0,.7);
+      color:var(--neon);
+      border-radius:8px;
+      opacity:0;
+      transform:translateY(10px);
+      transition:.3s;
+      z-index:999;
+    }
+
+    #toast.show {
+      opacity:1;
+      transform:translateY(0);
+    }
+  </style>
 </head>
 
 <body>
-	<!-- Navbar -->
-	<div class="navbar">
-		<div class="left-content">
-			<img src="https://i.postimg.cc/d1rW7h0y/PFP.png" alt="favicon" />
-			<span>ProGS2Z |V1.0.0</span>
-		</div>
 
-		<div class="nav-buttons">
-			<button onclick="switchPage('home')" class="icon-btn" title="Home">
-        <img src="https://img.icons8.com/ios-filled/50/00ff00/home.png" alt="Home" />
-      </button>
-			<button onclick="switchPage('games')" class="icon-btn" title="Games">
-        <img src="https://img.icons8.com/ios-filled/50/00ff00/controller.png" alt="Games" />
-      </button>
-			<button onclick="switchPage('apps')" class="icon-btn" title="Apps">
-        <img src="https://img.icons8.com/ios-filled/50/00ff00/smartphone-tablet.png" alt="Apps" />
-      </button>
-		</div>
+<div class="navbar">
+  <div class="left-content">
+    <img src="https://i.postimg.cc/d1rW7h0y/PFP.png">
+    ProGS2Z<br>V1.0.0
+  </div>
 
-		<div class="settings-icon" onclick="toggleSettings()" title="Settings">
-			<img src="https://img.icons8.com/ios-filled/50/00ff00/settings.png" alt="Settings" />
-    </div>
-		</div>
+  <div class="nav-buttons">
+    <button class="icon-btn" onclick="switchPage('home')">
+      <img src="https://img.icons8.com/ios-filled/50/00ff00/home.png">
+    </button>
+    <button class="icon-btn" onclick="switchPage('games')">
+      <img src="https://img.icons8.com/ios-filled/50/00ff00/controller.png">
+    </button>
+    <button class="icon-btn" onclick="switchPage('apps')">
+      <img src="https://img.icons8.com/ios-filled/50/00ff00/smartphone-tablet.png">
+    </button>
+  </div>
 
-		<!-- Settings Panel -->
-		<div class="settings-panel" id="settingsPanel">
-			<h3 style="color: #00ff00; text-align: center;">Settings</h3>
-			<div class="tab-cloak-container">
-				<input type="text" id="tab-name" placeholder="Enter Tab Title" />
-				<input type="url" id="favicon-url" placeholder="Enter Favicon URL" />
-    </div>
-				<button class="settings-btn" onclick="applyTabCloak()">Apply Tab Cloak</button>
-				<div class="separator"></div>
-				<button class="settings-btn" onclick="openAboutBlank()">Open about:blank</button>
-			</div>
+  <div class="settings-icon" onclick="toggleSettings()">
+    <img src="https://img.icons8.com/ios-filled/50/00ff00/settings.png">
+  </div>
+</div>
 
-			<!-- Main Frame -->
-			<iframe id="contentFrame" src="home.html"></iframe>
+<div class="settings-panel" id="settingsPanel">
+  <h3 class="console-title">SYSTEM CONSOLE</h3>
+  <input id="tab-name" placeholder="Tab Title">
+  <input id="favicon-url" placeholder="Favicon URL">
+  <button class="settings-btn" onclick="applyTabCloak()">ENGAGE TAB CLOAK</button>
+</div>
 
-			<!-- Scripts -->
-			<script>
-				function switchPage(page) {
-      const settingsPanel = document.getElementById('settingsPanel');
-      if (settingsPanel.style.display === 'block') {
-        settingsPanel.style.display = 'none';
-      }
-      const frame = document.getElementById('contentFrame');
-      if (page === 'home') {
-        frame.src = 'home.html';
-      } else if (page === 'games') {
-        frame.src = 'games.html';
-      } else if (page === 'apps') {
-        frame.src = 'app.html';
-      }
+<iframe id="contentFrame" src="home.html"></iframe>
+<div id="toast"></div>
+
+<script>
+  function switchPage(page) {
+    const frame = document.getElementById('contentFrame');
+    frame.classList.add('loading');
+    setTimeout(() => {
+      frame.src = page === 'home' ? 'home.html' :
+                  page === 'games' ? 'games.html' :
+                  'app.html';
+    }, 200);
+    frame.onload = () => frame.classList.remove('loading');
+  }
+
+  function toggleSettings() {
+    const p = document.getElementById('settingsPanel');
+    p.style.display = p.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'),2500);
+  }
+
+  function applyTabCloak() {
+    document.title = tab-name.value;
+    document.querySelector('link[rel="icon"]').href = favicon-url.value;
+    showToast('TAB CLOAK ENGAGED');
+  }
+
+  window.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'G') {
+      document.body.style.filter = 'hue-rotate(90deg)';
+      showToast('GOD MODE ACTIVE');
     }
+  });
+</script>
 
-    function toggleSettings() {
-      const settingsPanel = document.getElementById('settingsPanel');
-      settingsPanel.style.display =
-        settingsPanel.style.display === 'none' || settingsPanel.style.display === ''
-          ? 'block'
-          : 'none';
-    }
-
-    function applyTabCloak() {
-      const tabName = document.getElementById('tab-name').value;
-      const faviconUrl = document.getElementById('favicon-url').value;
-      if (tabName && faviconUrl) {
-        document.title = tabName;
-        const link = document.querySelector('link[rel="icon"]');
-        if (link) link.href = faviconUrl;
-      } else {
-        alert('Please enter both a tab name and favicon URL.');
-      }
-    }
-
-    function openAboutBlank() {
-      const gameUrl = 'https://idoit-16.github.io/progs2z/';
-      const win = window.open('about:blank', '_blank');
-      win.document.write(`
-        <html>
-          <head><title>Math Work</title></head>
-          <body style="margin: 0; background: #000;">
-            <iframe src="${gameUrl}" width="100%" height="100%" style="border: none;"></iframe>
-          </body>
-        </html>
-      `);
-      win.document.close();
-    }
-
-    window.addEventListener('keydown', function(event) {
-      if (event.key === '\\') {
-        window.location.href = 'https://www.google.com';
-      }
-    });
-			</script>
 </body>
-
 </html>
